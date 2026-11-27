@@ -14,11 +14,11 @@ struct AutoClickerShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: StartScriptIntent(),
-            phrases: ["启动自动点击脚本"]
+            phrases: ["启动自动点击脚本 \(.applicationName)"]
         )
         AppShortcut(
             intent: StopScriptIntent(),
-            phrases: ["停止自动点击脚本"]
+            phrases: ["停止自动点击脚本 \(.applicationName)"]
         )
     }
 }
