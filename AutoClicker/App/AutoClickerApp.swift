@@ -40,19 +40,19 @@ struct MainTabView: View {
     var body: some View {
         TabView(selection: $selected) {
             ScriptListView()
-                .tabItem { Label("脚本", systemImage: "list.bullet.rectangle") }
+                .tabItem { Label("Scripts", systemImage: "list.bullet.rectangle") }
                 .tag(Tab.scripts)
 
             CaptureView()
-                .tabItem { Label("打点", systemImage: "hand.tap") }
+                .tabItem { Label("Capture", systemImage: "hand.tap") }
                 .tag(Tab.capture)
 
             ConsoleView()
-                .tabItem { Label("运行", systemImage: "play.circle") }
+                .tabItem { Label("Run", systemImage: "play.circle") }
                 .tag(Tab.console)
 
             WizardView()
-                .tabItem { Label("向导", systemImage: "questionmark.circle") }
+                .tabItem { Label("Guide", systemImage: "questionmark.circle") }
                 .tag(Tab.help)
         }
     }

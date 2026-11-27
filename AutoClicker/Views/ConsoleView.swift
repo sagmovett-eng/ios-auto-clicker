@@ -12,11 +12,11 @@ struct ConsoleView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("选择脚本") {
+                Section("Select script") {
                     if store.scripts.isEmpty {
-                        Text("暂无脚本，请先到「打点」页创建").foregroundStyle(.secondary)
+                        Text("No scripts yet, create one on the Capture tab").foregroundStyle(.secondary)
                     } else {
-                        Picker("脚本", selection: $selectedScriptId) {
+                        Picker("Script", selection: $selectedScriptId) {
                             ForEach(store.scripts) { s in
                                 Text(s.name).tag(Optional(s.id))
                             }
@@ -25,51 +25,51 @@ struct ConsoleView: View {
                 }
 
                 if let script = selectedScript {
-                    Section("运行状态") {
+                    Section("Run status") {
                         HStack {
-                            Text("状态")
+                            Text("Status")
                             Spacer()
                             Text(store.runState.displayName)
                                 .foregroundStyle(store.runState == .running ? .green : .secondary)
                         }
                         HStack {
-                            Text("已执行轮次")
+                            Text("Rounds done")
                             Spacer()
                             Text("\(store.currentRound)/\(script.params.isInfinite ? "∞" : "\(script.params.repeatCount)")")
                         }
                         HStack {
-                            Text("已运行时长")
+                            Text("Elapsed time")
                             Spacer()
                             Text(timeString(store.elapsedSeconds))
                         }
                         if let s = store.activeScript {
                             HStack {
-                                Text("当前脚本")
+                                Text("Current script")
                                 Spacer()
                                 Text(s.name).foregroundStyle(.secondary)
                             }
                         }
                         if !UIAccessibility.isSwitchControlRunning {
-                            Label("切换控制未开启：真实点击不会执行，请先在「向导」页配置", systemImage: "exclamationmark.triangle.fill")
+                            Label("Switch Control is off: real taps will not run. Set it up on the Guide tab first", systemImage: "exclamationmark.triangle.fill")
                                 .font(.caption)
                                 .foregroundStyle(.orange)
                         }
                     }
 
-                    Section("控制") {
+                    Section("Controls") {
                         HStack(spacing: 12) {
                             if store.runState == .running || store.runState == .paused {
-                                Button(store.runState == .paused ? "继续" : "暂停") {
+                                Button(store.runState == .paused ? "Resume" : "Pause") {
                                     if store.runState == .paused { store.resume() } else { store.pause() }
                                 }
                                 .buttonStyle(.borderedProminent)
 
-                                Button("停止", role: .destructive) {
+                                Button("Stop", role: .destructive) {
                                     store.stop()
                                 }
                                 .buttonStyle(.bordered)
                             } else {
-                                Button("启动") {
+                                Button("Start") {
                                     store.start(script: script)
                                 }
                                 .buttonStyle(.borderedProminent)
@@ -79,19 +79,19 @@ struct ConsoleView: View {
                     }
                 }
 
-                Section("执行说明（FR3.2）") {
+                Section("How it works") {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("本工具不注入系统，真实点击由 iOS 原生「切换控制」的自定手势执行。")
-                        Text("1. 在「向导」页完成五步配置。")
-                        Text("2. 回到目标 App，连按三次侧边按钮启用切换控制。")
-                        Text("3. 切回本页点击「启动」，控制台按脚本节拍计数。")
-                        Text("4. 再次连按三次侧边按钮可停止，或在本页点「停止」。")
+                        Text("This tool does not inject into the system. Real taps are performed by a Switch Control custom gesture.")
+                        Text("1. Finish the 5-step setup on the Guide tab.")
+                        Text("2. Return to the target app and triple-click the side button to enable Switch Control.")
+                        Text("3. Switch back here and tap Start; the console counts rounds by script timing.")
+                        Text("4. Triple-click the side button again to stop, or tap Stop here.")
                     }
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("运行控制台")
+            .navigationTitle("Run Console")
             .onAppear {
                 if selectedScriptId == nil { selectedScriptId = store.scripts.first?.id }
             }

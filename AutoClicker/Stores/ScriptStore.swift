@@ -68,7 +68,7 @@ final class ScriptStore: ObservableObject {
     }
 
     // MARK: - 脚本 CRUD
-    func createScript(named name: String = "未命名脚本") -> Script {
+    func createScript(named name: String = "Untitled script") -> Script {
         var s = Script(name: name)
         s.portraitPoints = []
         s.landscapePoints = []
@@ -94,7 +94,7 @@ final class ScriptStore: ObservableObject {
     func duplicateScript(_ script: Script) {
         var copy = script
         copy.id = UUID()
-        copy.name = script.name + " 副本"
+        copy.name = script.name + " copy"
         copy.createdAt = Date()
         copy.updatedAt = Date()
         scripts.insert(copy, at: 0)
@@ -155,7 +155,7 @@ final class ScriptStore: ObservableObject {
     private func finishSuccessfully() {
         stopBeat()
         runState = .completed
-        NotificationService.sendCompletion(title: "脚本执行完成", body: activeScript?.name ?? "脚本已完成")
+        NotificationService.sendCompletion(title: "Script completed", body: activeScript?.name ?? "Script finished")
         activeScript = nil
     }
 
@@ -163,7 +163,7 @@ final class ScriptStore: ObservableObject {
         guard runState == .running else { return }
         stopBeat()
         runState = .stopped
-        NotificationService.sendInterrupt(title: "脚本已中断", body: "请检查执行条件（三击启用/切换到控制）")
+        NotificationService.sendInterrupt(title: "Script interrupted", body: "Check run conditions (triple-click to enable / Switch Control on)")
     }
 
     // MARK: - 节拍计时

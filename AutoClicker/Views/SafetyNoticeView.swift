@@ -12,23 +12,23 @@ struct SafetyNoticeView: View {
                 .font(.system(size: 48))
                 .foregroundStyle(.orange)
 
-            Text("使用须知")
+            Text("Notice")
                 .font(.title2.bold())
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
-                    bullet("本工具通过 iOS 原生「切换控制」执行系统级自动点击，不做任何注入或越狱。")
-                    bullet("仅适用于本人设备、本人操作、合规用途（如辅助测试、无障碍练习）。")
-                    bullet("请勿用于游戏代练、批量抢购等违反平台规则或相关法律法规的场景。")
-                    bullet("连续点击可能触发系统安全提示；运行前请确认目标界面状态。")
-                    bullet("后台运行受限：App 退后台超过 30 秒将自动停止并通知。")
+                    bullet("This tool uses the native iOS Switch Control feature to perform system-level auto taps. No injection or jailbreak.")
+                    bullet("For your own device, your own use, and lawful purposes only (e.g. test assistance, accessibility practice).")
+                    bullet("Do not use for game boosting, bulk purchasing or any use that breaks platform rules or the law.")
+                    bullet("Continuous tapping may trigger system safety prompts. Check the target screen before running.")
+                    bullet("Background limits: the script stops and notifies you if the app stays in the background for over 30 seconds.")
                 }
             }
 
             Button(action: {
                 store.acceptSafety()
             }) {
-                Text(countdown > 0 ? "我已阅读并同意（\(countdown)s）" : "我已阅读并同意")
+                Text(countdown > 0 ? "I have read and agree (\(countdown)s)" : "I have read and agree")
                     .font(.headline)
                     .frame(maxWidth: .infinity)
                     .padding()

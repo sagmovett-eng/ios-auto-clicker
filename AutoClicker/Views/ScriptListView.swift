@@ -22,30 +22,30 @@ struct ScriptListView: View {
                     }
                 }
             }
-            .navigationTitle("自动点击器")
+            .navigationTitle("Auto Clicker")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         let s = store.createScript()
                         editingScript = s
                     } label: {
-                        Label("新建", systemImage: "plus")
+                        Label("New", systemImage: "plus")
                     }
                 }
             }
             .sheet(item: $editingScript) { script in
                 ScriptEditView(script: script)
             }
-            .confirmationDialog("删除脚本？", isPresented: Binding(
+            .confirmationDialog("Delete script?", isPresented: Binding(
                 get: { showDeleteConfirm != nil },
                 set: { if !$0 { showDeleteConfirm = nil } }
             ), titleVisibility: .visible) {
                 if let s = showDeleteConfirm {
-                    Button("删除", role: .destructive) {
+                    Button("Delete", role: .destructive) {
                         store.deleteScript(s)
                         showDeleteConfirm = nil
                     }
-                    Button("取消", role: .cancel) { showDeleteConfirm = nil }
+                    Button("Cancel", role: .cancel) { showDeleteConfirm = nil }
                 }
             }
         }
@@ -64,7 +64,7 @@ struct ScriptRow: View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(script.name).font(.headline)
-                Text("\(script.activePoints.count) 个点位 · 间隔 \(script.params.intervalMs)ms · \(script.params.isInfinite ? "无限" : "\(script.params.repeatCount) 次")")
+                Text("\(script.activePoints.count) points · interval \(script.params.intervalMs)ms · \(script.params.isInfinite ? "infinite" : "\(script.params.repeatCount) times")")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -87,8 +87,8 @@ struct ContentUnavailablePlaceholder: View {
     var body: some View {
         VStack(spacing: 12) {
             Image(systemName: "hand.tap").font(.largeTitle).foregroundStyle(.secondary)
-            Text("还没有脚本").font(.headline)
-            Text("点击右上角 + 新建，进入「打点」页录制第一个点位").font(.caption).foregroundStyle(.secondary)
+            Text("No scripts yet").font(.headline)
+            Text("Tap + at the top right, then record your first point on the Capture tab").font(.caption).foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 60)

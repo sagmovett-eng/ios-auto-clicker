@@ -13,11 +13,11 @@ struct WizardView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("选择目标脚本") {
+                Section("Select target script") {
                     if store.scripts.isEmpty {
-                        Text("暂无脚本，请先创建").foregroundStyle(.secondary)
+                        Text("No scripts yet, create one first").foregroundStyle(.secondary)
                     } else {
-                        Picker("脚本", selection: $selectedScriptId) {
+                        Picker("Script", selection: $selectedScriptId) {
                             ForEach(store.scripts) { s in
                                 Text(s.name).tag(Optional(s.id))
                             }
@@ -33,39 +33,39 @@ struct WizardView: View {
                 }
 
                 if let p = progress {
-                    Section("五步配置向导（\(stepsDone(p))/5）") {
-                        stepRow(index: 0, text: "确认点位与参数", done: p.steps[0])
-                        stepRow(index: 1, text: "打开「设置 → 辅助功能 → 切换控制」", done: p.steps[1])
-                        stepRow(index: 2, text: "在切换控制中「录制自定手势」", done: p.steps[2])
-                        stepRow(index: 3, text: "配置扫描方式与循环次数（建议循环开启）", done: p.steps[3])
-                        stepRow(index: 4, text: "三击侧边按钮启用，切回目标界面运行", done: p.steps[4])
+                    Section("5-step setup guide (\(stepsDone(p))/5)") {
+                        stepRow(index: 0, text: "Confirm points and parameters", done: p.steps[0])
+                        stepRow(index: 1, text: "Open Settings > Accessibility > Switch Control", done: p.steps[1])
+                        stepRow(index: 2, text: "In Switch Control, record a custom gesture", done: p.steps[2])
+                        stepRow(index: 3, text: "Set scanning mode and loop count (loop on recommended)", done: p.steps[3])
+                        stepRow(index: 4, text: "Triple-click the side button to enable, switch to the target screen and run", done: p.steps[4])
 
-                        Button(stepsDone(p) == 5 ? "重新开始" : "标记完成") {
+                        Button(stepsDone(p) == 5 ? "Restart" : "Mark all done") {
                             toggleStep()
                         }
                     }
                 }
 
-                Section("常见问题") {
-                    DisclosureGroup("为什么不能直接在 App 内模拟点击？") {
-                        Text("iOS 沙盒与 App Store 审核禁止第三方模拟系统输入，无法像安卓那样无障碍全局点击。本工具改用系统原生「切换控制」执行，免越狱、合规。")
+                Section("FAQ") {
+                    DisclosureGroup("Why can the app not tap by itself?") {
+                        Text("The iOS sandbox and App Store review forbid third-party apps from simulating system input, so there is no global accessibility tap like on Android. This tool uses the native Switch Control feature instead: no jailbreak needed.")
                             .font(.caption)
                     }
-                    DisclosureGroup("支持哪些 iOS 版本？") {
-                        Text("iOS 16+ 可安装使用；原生辅助功能路径 iOS 16+，代理模式 iOS 17+（需签名 IPA）。App 内快捷指令能力 iOS 16+。")
+                    DisclosureGroup("Which iOS versions are supported?") {
+                        Text("Installable on iOS 16+. Native accessibility path: iOS 16+. Proxy mode: iOS 17+ (signed IPA required). Shortcuts support: iOS 16+.")
                             .font(.caption)
                     }
-                    DisclosureGroup("签名方式有哪些？") {
-                        Text("个人免费签名 7 天需重签；开发者签名 $99/年 1 年有效。代理模式独立分发、不进 App Store。")
+                    DisclosureGroup("What signing options exist?") {
+                        Text("Free personal signing must be renewed every 7 days. Developer signing costs $99/year and lasts one year. Proxy mode is distributed outside the App Store.")
                             .font(.caption)
                     }
-                    DisclosureGroup("运行到一半停了？") {
-                        Text("后台运行受限，退后台超 30 秒自动停止并通知；请保持前台或按系统提示处理。")
+                    DisclosureGroup("Stopped halfway?") {
+                        Text("Background running is limited: the script stops and notifies you after 30 seconds in the background. Keep the app in the foreground or follow the system prompt.")
                             .font(.caption)
                     }
                 }
             }
-            .navigationTitle("配置向导")
+            .navigationTitle("Setup Guide")
             .onAppear {
                 if selectedScriptId == nil { selectedScriptId = store.scripts.first?.id }
                 refreshProgress()

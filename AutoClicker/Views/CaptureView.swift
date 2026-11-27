@@ -15,16 +15,16 @@ struct CaptureView: View {
     @State private var savedToScript: Script?
 
     enum CaptureMode: String, CaseIterable, Identifiable {
-        case overlay = "覆盖层捕捉"
-        case manual = "手动坐标"
-        case shot = "截图标定"
+        case overlay = "Overlay"
+        case manual = "Manual"
+        case shot = "Screenshot"
         var id: String { rawValue }
     }
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 12) {
-                Picker("打点方式", selection: $mode) {
+                Picker("Capture mode", selection: $mode) {
                     ForEach(CaptureMode.allCases) { m in
                         Text(m.rawValue).tag(m)
                     }
@@ -42,11 +42,11 @@ struct CaptureView: View {
                 .frame(maxHeight: .infinity)
 
                 HStack {
-                    Text("当前模式点位数：\(currentCount)")
+                    Text("Points in this mode: \(currentCount)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Spacer()
-                    Button("清空") { clearAll() }
+                    Button("Clear") { clearAll() }
                         .foregroundStyle(.red)
                 }
                 .padding(.horizontal)
@@ -54,7 +54,7 @@ struct CaptureView: View {
                 Button {
                     appendToCurrentScript()
                 } label: {
-                    Text("保存到脚本")
+                    Text("Save to script")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -65,7 +65,7 @@ struct CaptureView: View {
                 .padding(.horizontal)
                 .disabled(currentCount == 0)
             }
-            .navigationTitle("打点")
+            .navigationTitle("Capture")
             .sheet(item: $savedToScript) { script in
                 ScriptEditView(script: script)
             }
@@ -100,7 +100,7 @@ struct CaptureView: View {
         }
         guard !points.isEmpty else { return }
 
-        let script = store.createScript(named: "脚本 \(store.scripts.count + 1)")
+        let script = store.createScript(named: "Script \(store.scripts.count + 1)")
         var updated = script
         updated.portraitPoints = points
         store.updateScript(updated)
@@ -116,8 +116,8 @@ struct CaptureView: View {
                 if overlayTaps.isEmpty {
                     VStack(spacing: 8) {
                         Image(systemName: "hand.draw")
-                        Text("点击屏幕任意位置记录相对坐标点")
-                        Text("已记录 \(overlayTaps.count)/20")
+                        Text("Tap anywhere to record a relative point")
+                        Text("Recorded \(overlayTaps.count)/20")
                     }
                     .foregroundStyle(.secondary)
                 }
@@ -160,7 +160,7 @@ struct CaptureView: View {
                     .keyboardType(.decimalPad)
                     .textFieldStyle(.roundedBorder)
             }
-            Text("坐标按百分比记录，横竖屏自动适配（NFR1.3）。点击「保存到脚本」即生成 1 个点击点位。")
+            Text("Coordinates are stored as percentages and adapt to portrait/landscape. Tap Save to script to create 1 tap point.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -171,7 +171,7 @@ struct CaptureView: View {
     private var shotLayer: some View {
         VStack(spacing: 12) {
             PhotosPicker(selection: $selectedPickerItem, matching: .images) {
-                Label(shotImage == nil ? "选择目标界面截图" : "更换截图", systemImage: "photo.on.rectangle")
+                Label(shotImage == nil ? "Choose target screenshot" : "Change screenshot", systemImage: "photo.on.rectangle")
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.blue.opacity(0.15))
@@ -209,7 +209,7 @@ struct CaptureView: View {
                     })
                     .frame(maxHeight: 380)
             }
-            Text("在截图上点击以标定位置；同一截图最多记录 20 个点。")
+            Text("Tap the screenshot to mark positions; up to 20 points per screenshot.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }

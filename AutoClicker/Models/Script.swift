@@ -8,9 +8,9 @@ enum PointType: String, Codable, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .tap: return "点击"
-        case .hold: return "长按"
-        case .swipe: return "滑动"
+        case .tap: return "Tap"
+        case .hold: return "Hold"
+        case .swipe: return "Swipe"
         }
     }
 }
@@ -133,34 +133,34 @@ enum ParamValidator {
     static func validate(_ script: Script) -> [String] {
         var errors: [String] = []
         if script.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            errors.append("脚本名称不能为空")
+            errors.append("Script name cannot be empty")
         }
         if script.name.count > 30 {
-            errors.append("脚本名称不能超过 30 字符")
+            errors.append("Script name cannot exceed 30 characters")
         }
         let pts = script.activePoints
         if pts.isEmpty {
-            errors.append("至少需要 1 个点位")
+            errors.append("At least 1 point is required")
         }
         if pts.count > pointLimit {
-            errors.append("点位不能超过 \(pointLimit) 个")
+            errors.append("No more than \(pointLimit) points allowed")
         }
         for p in pts {
             if !coordinateRange.contains(p.xPercent) || !coordinateRange.contains(p.yPercent) {
-                errors.append("坐标需在 0-100% 范围内")
+                errors.append("Coordinates must be within 0-100%")
             }
         }
         if !intervalRange.contains(script.params.intervalMs) || script.params.intervalMs % intervalStep != 0 {
-            errors.append("点击间隔需在 100-60000ms 且为 100 的整数倍")
+            errors.append("Tap interval must be 100-60000ms and a multiple of 100")
         }
         if !holdRange.contains(script.params.holdMs) || script.params.holdMs % holdStep != 0 {
-            errors.append("按住时长需在 50-10000ms 且为 50 的整数倍")
+            errors.append("Hold time must be 50-10000ms and a multiple of 50")
         }
         if !script.params.isInfinite && !countRange.contains(script.params.repeatCount) {
-            errors.append("重复次数需在 1-99999")
+            errors.append("Repeat count must be 1-99999")
         }
         if !loopGapRange.contains(script.params.loopGapSec) {
-            errors.append("循环间隔需在 0-600s")
+            errors.append("Loop gap must be 0-600s")
         }
         return errors
     }
@@ -184,11 +184,11 @@ enum RunState: Equatable {
 
     var displayName: String {
         switch self {
-        case .idle: return "空闲"
-        case .running: return "运行中"
-        case .paused: return "已暂停"
-        case .completed: return "已完成"
-        case .stopped: return "已停止"
+        case .idle: return "Idle"
+        case .running: return "Running"
+        case .paused: return "Paused"
+        case .completed: return "Completed"
+        case .stopped: return "Stopped"
         }
     }
 }

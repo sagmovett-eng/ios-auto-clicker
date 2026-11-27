@@ -14,37 +14,37 @@ struct AutoClickerShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: StartScriptIntent(),
-            phrases: ["启动自动点击脚本 \(.applicationName)"]
+            phrases: ["Start auto click script in \(.applicationName)"]
         )
         AppShortcut(
             intent: StopScriptIntent(),
-            phrases: ["停止自动点击脚本 \(.applicationName)"]
+            phrases: ["Stop auto click script in \(.applicationName)"]
         )
     }
 }
 
 @available(iOS 16.0, *)
 struct StartScriptIntent: AppIntent {
-    static var title: LocalizedStringResource = "启动自动点击脚本"
+    static var title: LocalizedStringResource = "Start auto click script"
 
-    @Parameter(title: "脚本名称")
+    @Parameter(title: "Script name")
     var scriptName: String
 
     @MainActor
     func perform() async throws -> some IntentResult {
         // 实际启动依赖 App 内选中脚本；快捷指令携带脚本名做参数透传
-        return .result(value: "已接收启动请求：\(scriptName)")
+        return .result(value: "Start request received: \(scriptName)")
     }
 }
 
 @available(iOS 16.0, *)
 struct StopScriptIntent: AppIntent {
-    static var title: LocalizedStringResource = "停止自动点击"
+    static var title: LocalizedStringResource = "Stop auto click"
 
     static var openAppWhenRun: Bool = true
 
     @MainActor
     func perform() async throws -> some IntentResult {
-        return .result(value: "已停止")
+        return .result(value: "Stopped")
     }
 }

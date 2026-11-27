@@ -22,11 +22,11 @@ struct ScriptEditView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("名称") {
-                    TextField("≤30 字符", text: $name)
+                Section("Name") {
+                    TextField("Up to 30 characters", text: $name)
                 }
 
-                Section("点位（\(script.activePoints.count)/20）") {
+                Section("Points (\(script.activePoints.count)/20)") {
                     ForEach(script.activePoints) { point in
                         HStack {
                             Text(point.type.displayName)
@@ -40,31 +40,31 @@ struct ScriptEditView: View {
                     }
                     .onDelete(perform: removePoints)
 
-                    NavigationLink("新增点位（去打点页）") {
+                    NavigationLink("Add point (go to Capture tab)") {
                         CaptureRedirectNote()
                     }
                 }
 
-                Section("运行参数") {
+                Section("Run parameters") {
                     HStack {
-                        Text("点击间隔 (ms)")
+                        Text("Tap interval (ms)")
                         TextField("100-60000", text: $intervalText).keyboardType(.numberPad)
                     }
                     HStack {
-                        Text("按住时长 (ms)")
+                        Text("Hold time (ms)")
                         TextField("50-10000", text: $holdText).keyboardType(.numberPad)
                     }
                     HStack {
-                        Text("重复次数")
+                        Text("Repeat count")
                         TextField("1-99999", text: $countText)
                             .keyboardType(.numberPad)
                             .disabled(isInfinite)
                     }
                     HStack {
-                        Text("循环间隔 (s)")
+                        Text("Loop gap (s)")
                         TextField("0-600", text: $loopGapText).keyboardType(.numberPad)
                     }
-                    Toggle("无限循环", isOn: $isInfinite)
+                    Toggle("Infinite loop", isOn: $isInfinite)
                 }
 
                 if showErrors && !validationErrors.isEmpty {
@@ -77,15 +77,15 @@ struct ScriptEditView: View {
                 }
 
                 Section {
-                    Button("保存") { save() }
+                    Button("Save") { save() }
                         .frame(maxWidth: .infinity)
                         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
-            .navigationTitle("编辑脚本")
+            .navigationTitle("Edit Script")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") { dismiss() }
+                    Button("Cancel") { dismiss() }
                 }
             }
             .onAppear { hydrate() }
@@ -132,11 +132,11 @@ struct ScriptEditView: View {
 struct CaptureRedirectNote: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label("打点在「打点」标签页完成：", systemImage: "hand.tap")
-            Text("覆盖层捕捉 → 点击屏幕记录坐标；手动坐标 → 输入百分比；截图标定 → 选图后点图记录。")
+            Label("Capture points on the Capture tab:", systemImage: "hand.tap")
+            Text("Overlay: tap the screen to record. Manual: enter percentages. Screenshot: pick an image and tap it.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            Text("保存后会生成新脚本，可在此继续编辑参数与点位。")
+            Text("Saving creates a new script; you can keep editing its parameters and points here.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
